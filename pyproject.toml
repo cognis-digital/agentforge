@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "agentforge-cognis"
-version = "0.2.0"
+version = "0.2.1"
 description = "Build organizations of AI agents (roles, personalities, experience, skills, tools); run them, export to CrewAI/AutoGen/LangGraph/OpenHands/TaskWeaver/MetaGPT, sync to PM suites. Enterprise-ready: governance policy engine, audit trail, generic OpenAI backend. Interoperable with the Cognis suite."
 readme = "README.md"
 requires-python = ">=3.9"
@@ -14,6 +14,7 @@ keywords = ["ai-agents", "multi-agent", "agent-orchestration", "llm", "crewai",
             "autogen", "langgraph", "openhands", "taskweaver", "agentops"]
 
 [project.scripts]
+"agentforge-emit" = "agentforge.connect:emit_main"
 agentforge = "agentforge.cli:main"
 
 [project.urls]
@@ -21,3 +22,6 @@ Homepage = "https://github.com/cognis-digital/agentforge"
 
 [tool.hatch.build.targets.wheel]
 packages = ["agentforge"]
+
+[project.optional-dependencies]
+connect = ["cognis-connect @ git+https://github.com/cognis-digital/cognis-connect.git"]
