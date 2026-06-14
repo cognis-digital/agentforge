@@ -93,6 +93,14 @@ def cmd_pm(a):
     _j(pmmod.sync(org, a.platform, a.task or [])); return 0
 
 
+def cmd_validate(a):
+    from .policy import Policy, PolicyEngine
+    org = _load_org(a)
+    pol = Policy(require_reports_to=a.require_reports_to,
+                 approval_required=(a.approval_required or "").split(",") if a.approval_required else [])
+    _j(PolicyEngine(pol).validate(org)); return 0
+
+
 def cmd_frameworks(a):
     out = {"agent_frameworks": catalog.all_frameworks(), "pm_suites": catalog.pm_suites(),
            "cognis": catalog.cognis()}
@@ -135,6 +143,9 @@ def build_parser():
     sp.add_argument("--code", action="store_true")
     sp = add("pm", cmd_pm, org=True); sp.add_argument("--platform", required=True)
     sp.add_argument("--task", action="append")
+    sp = add("validate", cmd_validate, org=True)
+    sp.add_argument("--require-reports-to", action="store_true")
+    sp.add_argument("--approval-required", help="comma-separated tools needing approval")
     add("frameworks", cmd_frameworks)
     return p
 

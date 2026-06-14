@@ -4,8 +4,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "agentforge-cognis"
-version = "0.1.0"
-description = "Build organizations of AI agents (roles, personalities, experience, skills, tools); run them, export to CrewAI/AutoGen/LangGraph/OpenHands/TaskWeaver/MetaGPT, and sync to PM suites. Interoperable with the Cognis suite."
+version = "0.2.0"
+description = "Build organizations of AI agents (roles, personalities, experience, skills, tools); run them, export to CrewAI/AutoGen/LangGraph/OpenHands/TaskWeaver/MetaGPT, sync to PM suites. Enterprise-ready: governance policy engine, audit trail, generic OpenAI backend. Interoperable with the Cognis suite."
 readme = "README.md"
 requires-python = ">=3.9"
 license = { text = "LicenseRef-COCL-1.0" }

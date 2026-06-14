@@ -12,7 +12,7 @@ from dataclasses import dataclass, field, asdict
 from typing import Optional
 
 TOOL_NAME = "agentforge"
-TOOL_VERSION = "0.1.0"
+TOOL_VERSION = "0.2.0"
 
 EXPERIENCE = ["intern", "junior", "mid", "senior", "staff", "principal", "exec"]
 

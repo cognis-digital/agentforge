@@ -7,7 +7,8 @@
 > agent + PM platforms.
 
 [![Code License: COCL 1.0](https://img.shields.io/badge/License-COCL%201.0-6b46c1.svg)](LICENSE)
-[![tests](https://img.shields.io/badge/tests-10%20passing-2ea44f.svg)](tests/)
+[![tests](https://img.shields.io/badge/tests-20%20passing-2ea44f.svg)](tests/)
+[![enterprise-ready](https://img.shields.io/badge/enterprise-ready-1f6feb.svg)](docs/ENTERPRISE.md)
 
 <!-- cognis:layman:start -->
 ## What is this?
@@ -63,9 +64,25 @@ template; the tool registry maps to **kycaml / cryptotrace / ragkit / labforge**
 ## Runtime
 
 `Runtime(backend).run_team(org, team, task)` assigns a task across a team, collects
-each agent's contribution, and has the lead synthesize a result. `LocalMockBackend`
-is deterministic and offline (tool + tests run anywhere); `FleetBackend` calls a
-local edgemesh/fleet `/v1` endpoint and falls back to the mock if it's unreachable.
+each agent's contribution, and has the lead synthesize a result, with per-agent error
+isolation and usage metering. `LocalMockBackend` is deterministic/offline;
+`OpenAIBackend` targets any OpenAI-compatible endpoint (retries + timeout);
+`FleetBackend` targets edgemesh/the fleet with a graceful fallback.
+
+## Enterprise
+
+Built to drop into a real org (see [`docs/ENTERPRISE.md`](docs/ENTERPRISE.md)):
+
+- **Bring your own backend** via env vars (`AGENTFORGE_BACKEND/_BASE_URL/_API_KEY/_MODEL`) — OpenAI, Azure OpenAI, vLLM, a gateway, or the local fleet; secrets from your store, never code.
+- **Governance — policy as code:** global + per-role tool allow/deny lists, approval-required tools, budget caps, chain-of-command. `PolicyEngine.validate(org)` gates deploys; `agentforge validate` runs it in CI.
+- **Audit trail:** append-only JSONL of every agent run/synthesis/error with timestamps.
+- **Org-as-config** in version control (`load_org`/`save_org`), reviewed and validated like code.
+- **Reliability:** retries/timeouts, per-agent error isolation, usage metering for cost/limit tracking.
+- Runs on infrastructure you own — pair with **edgemesh** + **labforge** for on-prem/air-gapped.
+
+```sh
+agentforge validate --file orgs/eng.json --require-reports-to --approval-required github,sql
+```
 
 <!-- cognis:install:start -->
 ## Install
