@@ -67,6 +67,9 @@ def test_export_all_frameworks():
     for f in fw.EXPORTERS:
         out = fw.export(org, f)
         assert out["framework"] == f
+        if f == "mermaid":
+            assert out["diagram"].startswith("flowchart")
+            continue
         # every agent represented
         n = len(org.all_agents())
         key = "agents" if "agents" in out else ("roles" if "roles" in out else "nodes")

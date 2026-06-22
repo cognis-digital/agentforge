@@ -6,8 +6,9 @@
   personas                          list personality archetypes
   skills | tools                    the skill / tool registry
   run --template NAME --team KEY --task "..." [--fleet]   run a team on a task
-  export --template NAME --framework crewai|autogen|langgraph|openhands|taskweaver|metagpt [--code]
+  export --template NAME --framework crewai|autogen|langgraph|openhands|taskweaver|metagpt|mermaid [--code]
   pm --template NAME --platform github|jira|linear|notion|trello|asana --task "..."
+  schema [--file F | --template NAME]   emit the org JSON Schema, or validate an org doc
   frameworks                        everything agentforge interoperates with
 
 --format table|json
@@ -101,6 +102,20 @@ def cmd_validate(a):
     _j(PolicyEngine(pol).validate(org)); return 0
 
 
+def cmd_schema(a):
+    """Emit the org JSON Schema, or validate an org file against the contract."""
+    from . import schema as sch
+    if getattr(a, "file", None) or getattr(a, "template", None):
+        if a.file:
+            doc = json.load(open(a.file, encoding="utf-8"))
+        else:
+            doc = T.from_template(a.template).to_dict()
+        rep = sch.validate_doc(doc)
+        _j(rep)
+        return 0 if rep["ok"] else 1
+    _j(sch.org_schema()); return 0
+
+
 def cmd_frameworks(a):
     out = {"agent_frameworks": catalog.all_frameworks(), "pm_suites": catalog.pm_suites(),
            "cognis": catalog.cognis()}
@@ -146,6 +161,9 @@ def build_parser():
     sp = add("validate", cmd_validate, org=True)
     sp.add_argument("--require-reports-to", action="store_true")
     sp.add_argument("--approval-required", help="comma-separated tools needing approval")
+    sp = add("schema", cmd_schema)
+    sp.add_argument("--template"); sp.add_argument("--file")
+    sp.set_defaults(_no_default_template=True)
     add("frameworks", cmd_frameworks)
     return p
 
@@ -155,7 +173,9 @@ def main(argv=None):
     if not getattr(args, "command", None):
         build_parser().print_help(); return 2
     # default template if an org-taking command got neither
-    if hasattr(args, "template") and not args.template and not getattr(args, "file", None):
+    if (hasattr(args, "template") and not args.template
+            and not getattr(args, "file", None)
+            and not getattr(args, "_no_default_template", False)):
         args.template = "software_team"
     return args.func(args)
 

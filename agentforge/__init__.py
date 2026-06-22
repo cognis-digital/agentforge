@@ -6,8 +6,9 @@ OpenAI-compatible backend with retries + usage metering."""
 from .models import (
     TOOL_NAME, TOOL_VERSION, EXPERIENCE, Persona, Agent, Team, Organization,
 )
-from . import personas, registry, templates, runtime, interop, config, policy, audit
+from . import personas, registry, templates, runtime, interop, config, policy, audit, schema
 from .templates import from_template, TEMPLATES
+from .schema import org_schema, validate_doc
 from .runtime import (
     Runtime, Backend, LocalMockBackend, OpenAIBackend, FleetBackend, BackendError,
     RunResult,
@@ -19,7 +20,8 @@ from .audit import AuditTrail, Event
 __all__ = [
     "TOOL_NAME", "TOOL_VERSION", "EXPERIENCE", "Persona", "Agent", "Team",
     "Organization", "personas", "registry", "templates", "runtime", "interop",
-    "config", "policy", "audit", "from_template", "TEMPLATES",
+    "config", "policy", "audit", "schema", "org_schema", "validate_doc",
+    "from_template", "TEMPLATES",
     "Runtime", "Backend", "LocalMockBackend", "OpenAIBackend", "FleetBackend",
     "BackendError", "RunResult", "load_org", "save_org", "backend_from_env",
     "Policy", "PolicyEngine", "Decision", "AuditTrail", "Event",

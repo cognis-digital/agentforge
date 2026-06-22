@@ -62,9 +62,36 @@ def to_metagpt(org: Organization) -> dict:
         for t in org.teams for a in t.members]}
 
 
+def to_mermaid(org: Organization) -> dict:
+    """Render the org as a Mermaid flowchart (chain-of-command + team grouping).
+
+    Mermaid is the diagram standard rendered natively by GitHub, GitLab, Notion,
+    Obsidian and most docs tooling, so the org chart drops straight into a README
+    or wiki. Returns {framework, format, diagram} — the diagram string is the
+    Mermaid source."""
+    def _node(a: Agent) -> str:
+        label = f"{a.name}<br/>{a.role}<br/><i>{a.experience} · {a.persona.archetype}</i>"
+        return f'  {a.key}["{label}"]'
+
+    lines = ["flowchart TD"]
+    for t in org.teams:
+        lines.append(f"  subgraph {t.key}[\"{t.name}\"]")
+        for a in t.members:
+            lines.append("  " + _node(a))
+        lines.append("  end")
+    # chain-of-command edges (reports_to), plus lead emphasis
+    for t in org.teams:
+        for a in t.members:
+            if a.reports_to:
+                lines.append(f"  {a.reports_to} --> {a.key}")
+    diagram = "\n".join(lines)
+    return {"framework": "mermaid", "format": "mermaid-flowchart", "diagram": diagram}
+
+
 EXPORTERS = {
     "crewai": to_crewai, "autogen": to_autogen, "langgraph": to_langgraph,
     "openhands": to_openhands, "taskweaver": to_taskweaver, "metagpt": to_metagpt,
+    "mermaid": to_mermaid,
 }
 
 
@@ -95,4 +122,6 @@ def to_code(org: Organization, framework: str) -> str:
         lines.append(f"chat = GroupChat(agents=[{', '.join(a['name'] for a in cfg['agents'])}], "
                      f"max_round=12)")
         return "\n".join(lines)
-    raise ValueError(f"to_code supports crewai/autogen; got '{framework}'")
+    if fw == "mermaid":
+        return to_mermaid(org)["diagram"]
+    raise ValueError(f"to_code supports crewai/autogen/mermaid; got '{framework}'")

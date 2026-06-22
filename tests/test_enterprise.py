@@ -15,7 +15,7 @@ from agentforge.cli import main  # noqa: E402
 
 
 def test_version_bumped():
-    assert TOOL_VERSION == "0.2.0"
+    assert TOOL_VERSION == "0.2.1"
 
 
 def test_org_save_load_roundtrip(tmp_path=None):

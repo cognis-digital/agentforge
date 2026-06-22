@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.2.1 — Schema, Mermaid, and demos
+- **Org JSON Schema** (`agentforge.schema`) — emit a standards-compliant JSON Schema
+  (Draft 2020-12) for an org definition (`agentforge schema --format json`), generated
+  from the live persona/skill/tool registries so it never drifts. Use it for
+  `$schema` editor autocomplete and CI linting of org files.
+- **Dependency-free org validator** — `agentforge schema --file org.json` checks
+  structure, the enum vocabularies, unique keys, and the `lead`/`reports_to`
+  cross-references, with JSON-path error locations. No third-party validator required;
+  cross-checked against `jsonschema` when installed.
+- **Mermaid exporter** — `agentforge export --framework mermaid` renders the org chart
+  (teams + chain-of-command) as a Mermaid flowchart that GitHub/GitLab/Notion render
+  natively.
+- **`demos/`** — 10 real-use-case agent orgs (incident response, SOC 2 readiness, AI
+  research lab, mobile launch, M&A due diligence, MLOps, grant writing, support
+  escalation, energy research desk, JTF MERIDIAN), each with a runnable `org.json` and
+  a `SCENARIO.md`. A test validates every demo against the schema.
+- 29 tests.
+
 ## 0.2.0 — Enterprise hardening
 - **Generic OpenAI backend** (`OpenAIBackend`) — point agentforge at *any* OpenAI-
   compatible endpoint (OpenAI, Azure OpenAI, vLLM, a corporate gateway), not just the
