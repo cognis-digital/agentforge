@@ -1,0 +1,26 @@
+$ agentforge-emit --help
+
+usage: agentforge [-h] [--version]
+                  {templates,org,agents,personas,skills,tools,run,export,pm,validate,schema,frameworks} ...
+
+agentforge — organizations of AI agents, runnable and exportable.
+
+  templates                         list ready-made org templates
+  org --template NAME | --file F    show an organization
+  agents --template NAME            list agents (role/persona/experience/skills/tools)
+  personas                          list personality archetypes
+  skills | tools                    the skill / tool registry
+  run --template NAME --team KEY --task "..." [--fleet]   run a team on a task
+  export --template NAME --framework crewai|autogen|langgraph|openhands|taskweaver|metagpt|mermaid [--code]
+  pm --template NAME --platform github|jira|linear|notion|trello|asana --task "..."
+  schema [--file F | --template NAME]   emit the org JSON Schema, or validate an org doc
+  frameworks                        everything agentforge interoperates with
+
+--format table|json
+
+positional arguments:
+  {templates,org,agents,personas,skills,tools,run,export,pm,validate,schema,frameworks}
+
+options:
+  -h, --help            show this help message and exit
+  --version             show program's version number and exit

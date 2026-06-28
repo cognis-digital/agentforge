@@ -1,0 +1,92 @@
+$ agentforge-emit schema
+
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/cognis-digital/agentforge/schema/org.schema.json",
+  "title": "agentforge Organization",
+  "description": "An organization of AI agents (roles, personalities, experience, skills, tools) as defined by agentforge.",
+  "type": "object",
+  "required": [
+    "key",
+    "teams"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "tool": {
+      "const": "agentforge"
+    },
+    "version": {
+      "type": "string"
+    },
+    "key": {
+      "type": "string",
+      "minLength": 1
+    },
+    "name": {
+      "type": "string"
+    },
+    "mission": {
+      "type": "string"
+    },
+    "teams": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "key",
+          "members"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "key": {
+            "type": "string",
+            "minLength": 1
+          },
+          "name": {
+            "type": "string"
+          },
+          "mission": {
+            "type": "string"
+          },
+          "lead": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "agent key of the team lead (must be a member)."
+          },
+          "members": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "key",
+                "role"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "key": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "Unique agent id within the org."
+                },
+                "name": {
+                  "type": "string"
+                },
+                "role": {
+                  "type": "string",
+                  "description": "Job title / function."
+                },
+                "persona": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "archetype": {
+                      "type": "string",
+                      "enum": [
+                        "analyst",
+                        "builder",
+                        "creative",
+                        "diplomat",
+                        "operator",
+ 

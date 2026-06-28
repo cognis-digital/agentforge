@@ -11,6 +11,143 @@
 [![enterprise-ready](https://img.shields.io/badge/enterprise-ready-1f6feb.svg)](docs/ENTERPRISE.md)
 
 <!-- cognis:layman:start -->
+
+<!-- cognis:example:start -->
+## 🔎 Example output
+
+Real, reproducible output from the tool — runs offline:
+
+```console
+$ agentforge-emit --version
+agentforge 0.2.1
+```
+
+```console
+$ agentforge-emit --help
+usage: agentforge [-h] [--version]
+                  {templates,org,agents,personas,skills,tools,run,export,pm,validate,schema,frameworks} ...
+
+agentforge — organizations of AI agents, runnable and exportable.
+
+  templates                         list ready-made org templates
+  org --template NAME | --file F    show an organization
+  agents --template NAME            list agents (role/persona/experience/skills/tools)
+  personas                          list personality archetypes
+  skills | tools                    the skill / tool registry
+  run --template NAME --team KEY --task "..." [--fleet]   run a team on a task
+  export --template NAME --framework crewai|autogen|langgraph|openhands|taskweaver|metagpt|mermaid [--code]
+  pm --template NAME --platform github|jira|linear|notion|trello|asana --task "..."
+  schema [--file F | --template NAME]   emit the org JSON Schema, or validate an org doc
+  frameworks                        everything agentforge interoperates with
+
+--format table|json
+
+positional arguments:
+  {templates,org,agents,personas,skills,tools,run,export,pm,validate,schema,frameworks}
+
+options:
+  -h, --help            show this help message and exit
+  --version             show program's version number and exit
+```
+
+```console
+$ agentforge-emit schema
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/cognis-digital/agentforge/schema/org.schema.json",
+  "title": "agentforge Organization",
+  "description": "An organization of AI agents (roles, personalities, experience, skills, tools) as defined by agentforge.",
+  "type": "object",
+  "required": [
+    "key",
+    "teams"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "tool": {
+      "const": "agentforge"
+    },
+    "version": {
+      "type": "string"
+    },
+    "key": {
+      "type": "string",
+      "minLength": 1
+    },
+    "name": {
+      "type": "string"
+    },
+    "mission": {
+      "type": "string"
+    },
+    "teams": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "key",
+          "members"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "key": {
+            "type": "string",
+            "minLength": 1
+          },
+          "name": {
+            "type": "string"
+          },
+          "mission": {
+            "type": "string"
+          },
+          "lead": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "agent key of the team lead (must be a member)."
+          },
+          "members": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "key",
+                "role"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "key": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "Unique agent id within the org."
+                },
+                "name": {
+                  "type": "string"
+                },
+                "role": {
+                  "type": "string",
+                  "description": "Job title / function."
+                },
+                "persona": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "archetype": {
+                      "type": "string",
+                      "enum": [
+                        "analyst",
+                        "builder",
+                        "creative",
+                        "diplomat",
+                        "operator",
+ 
+```
+
+> Blocks above are real `agentforge` output — reproduce them from a clone.
+
+<!-- cognis:example:end -->
+
 ## What is this?
 
 Most agent tools make you wire up one or two bots in code. agentforge lets you

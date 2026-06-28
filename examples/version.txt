@@ -1,0 +1,3 @@
+$ agentforge-emit --version
+
+agentforge 0.2.1
